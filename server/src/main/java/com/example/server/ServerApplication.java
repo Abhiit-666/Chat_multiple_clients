@@ -1,6 +1,8 @@
 package com.example.server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +16,7 @@ public class ServerApplication {
 		this.serverSocket = serverSocket;
 	}
 
-	public void startServer() {
+	public void startServer() throws IOException {
 		while (!serverSocket.isClosed()) {
 			Socket socket = serverSocket.accept();
 			System.out.println("A client connected!");
@@ -32,9 +34,9 @@ public class ServerApplication {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
-		ServerSocket serversocket = new ServerApplication(9000);
+		ServerSocket serversocket = new ServerSocket(9000);
 		ServerApplication server = new ServerApplication(serversocket);
 		server.startServer();
 

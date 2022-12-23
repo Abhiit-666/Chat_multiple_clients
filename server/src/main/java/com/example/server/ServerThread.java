@@ -1,6 +1,12 @@
-package main.java.com.example.server;
+package com.example.server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServerThread implements Runnable {
     private Socket socket;
@@ -31,8 +37,21 @@ public class ServerThread implements Runnable {
                 message = br.readLine();
                 broadcastMessage(clientUsername + ": " + message);
             } catch (IOException e) {
-                e.printStackTrace();
+                closeEverything(socket, br, pw);
+                break;
             }
+        }
+    }
+
+    private void closeEverything(Socket socket2, BufferedReader br2, BufferedWriter pw2) {
+        try {
+            br2.close();
+            pw2.close();
+            socket2.close();
+            clients.remove(this);
+            broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -45,7 +64,7 @@ public class ServerThread implements Runnable {
                     client.pw.flush();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                closeEverything(socket, br, pw);
             }
         }
     }
