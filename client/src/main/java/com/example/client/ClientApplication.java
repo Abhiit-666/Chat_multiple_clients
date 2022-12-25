@@ -1,10 +1,17 @@
 package com.example.client;
 
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
 import java.net.Socket;
+import java.util.Scanner;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import ch.qos.logback.core.net.server.Client;
 
 @SpringBootApplication
 public class ClientApplication {
@@ -33,9 +40,9 @@ public class ClientApplication {
 			pw.flush();
 			while (socket.isConnected()) {
 				String message = br.readLine();
-				br.write(username + ": " + message);
-				br.newLine();
-				br.flush();
+				pw.write(username + ": " + message);
+				pw.newLine();
+				pw.flush();
 			}
 		} catch (IOException e) {
 			closeEverything(socket, br, pw);
