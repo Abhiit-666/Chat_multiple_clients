@@ -35,10 +35,14 @@ public class ServerApplication {
 	}
 
 	public static void main(String[] args) throws IOException {
+		try {
+			ServerSocket serversocket = new ServerSocket(9000);
+			ServerApplication server = new ServerApplication(serversocket);
+			System.out.println("Server started!");
+			server.startServer();
 
-		ServerSocket serversocket = new ServerSocket(9000);
-		ServerApplication server = new ServerApplication(serversocket);
-		server.startServer();
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

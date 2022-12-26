@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import org.springframework.boot.SpringApplication;
@@ -38,9 +39,10 @@ public class ClientApplication {
 			pw.write(username);
 			pw.newLine();
 			pw.flush();
+			Scanner sc = new Scanner(System.in);
 			while (socket.isConnected()) {
-				String message = br.readLine();
-				pw.write(username + ": " + message);
+				String message = sc.nextLine();
+				pw.write(message);
 				pw.newLine();
 				pw.flush();
 			}
@@ -75,13 +77,15 @@ public class ClientApplication {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException, IOException {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter your username:");
 		String username = scanner.nextLine();
 
-		Socket socket = new Socket("localhost", 8080);
-		Client client = new Client(socket, username);
+		Socket socket = new Socket("localhost", 9000);
+		ClientApplication client = new ClientApplication(socket, username);
+		client.listenForMessage();
+		client.sendMessage();
 	}
 
 }
